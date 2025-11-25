@@ -1,0 +1,81 @@
+trigger: none   # run manually for testing
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  # === Your info (replace with real values) ===
+  myName: 'John Doe'
+  myDob: '1990-01-01'
+  myAddress: '123 Main St, Dallas, TX'
+  myPhone: '+1-555-123-4567'
+  myJob: 'Power Platform / DevOps Engineer'
+
+  # === Deployment settings (change to your Azure details) ===
+  webAppName: 'my-test-webapp-name'        # existing Azure Web App
+  azureServiceConnection: 'my-service-connection-name'  # service connection in DevOps
+
+stages:
+- stage: Build
+  displayName: 'Build static profile page'
+  jobs:
+  - job: BuildJob
+    displayName: 'Generate index.html'
+    steps:
+    - checkout: self
+
+    - task: Bash@3
+      displayName: 'Create index.html with my info'
+      inputs:
+        targetType: 'inline'
+        script: |
+          mkdir -p $(Build.SourcesDirectory)/dist
+          cat << 'EOF' > $(Build.SourcesDirectory)/dist/index.html
+          <html>
+            <head>
+              <title>My Profile</title>
+              <meta charset="utf-8" />
+            </head>
+            <body>
+              <h1>My Profile</h1>
+              <p><strong>Name:</strong> $(myName)</p>
+              <p><strong>DOB:</strong> $(myDob)</p>
+              <p><strong>Address:</strong> $(myAddress)</p>
+              <p><strong>Phone:</strong> $(myPhone)</p>
+              <p><strong>Job:</strong> $(myJob)</p>
+            </body>
+          </html>
+          EOF
+
+    - task: ArchiveFiles@2
+      displayName: 'Zip site files'
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/site.zip'
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish artifact'
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: Deploy
+  displayName: 'Deploy to Azure Web App'
+  dependsOn: Build
+  jobs:
+  - job: DeployJob
+    displayName: 'Deploy site.zip to Web App'
+    steps:
+    - download: current
+      artifact: drop
+
+    - task: AzureWebApp@1
+      displayName: 'Deploy to $(webAppName)'
+      inputs:
+        azureSubscription: '$(azureServiceConnection)'
+        appName: '$(webAppName)'
+        package: '$(Pipeline.Workspace)/drop/site.zip'
