@@ -12,7 +12,7 @@ variables:
   myJob: 'Power Platform / DevOps Engineer'
 
   # === Deployment settings (change to your Azure details) ===
-  webAppName: 'my-test-webapp-name'        # existing Azure Web App
+  webAppName: 'my-test-web-app'        # existing Azure Web App
   azureServiceConnection: 'my-service-connection-name'  # service connection in DevOps
 
 stages:
