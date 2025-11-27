@@ -32,7 +32,7 @@ stages:
          pwsh: true
          script: |
             # destination folder
-            $dist = Join-Path "$(Build.SourcesDirectory)" "dist"
+            $dist = Join-Path "$(Build.SourcesDirectory)/dist"
 
             # ensure folder exists
             New-Item -ItemType Directory -Force -Path $dist | Out-Null
