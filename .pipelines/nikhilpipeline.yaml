@@ -13,7 +13,7 @@ variables:
 
   # === Deployment settings (change to your Azure details) ===
   webAppName: 'my-test-web-app'        # existing Azure Web App
-  azureServiceConnection: 'nikhilservices'  # service connection in DevOps
+  azureServiceConnection: 'nikhilgenius064'  # service connection in DevOps
 
 stages:
 - stage: Build
