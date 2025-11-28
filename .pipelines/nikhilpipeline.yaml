@@ -95,25 +95,37 @@ stages:
     #     azure_static_web_apps_api_token: "$(deploymentToken)"
     #   displayName: "Deploy to Azure Static Web App"
 
-
     - task: PowerShell@2
       displayName: "Deploy to Azure Static Web App (Windows)"
       inputs:
         targetType: inline
-        pwsh: false
         script: |
-          echo "Logging into Azure..."
-          az login --service-principal `
-            --username "$(azureServicePrincipalId)" `
-            --password "$(azureServicePrincipalKey)" `
-            --tenant   "$(azureTenantId)"
-          az extension add --name staticwebapp --yes
+          npm install -g @azure/static-web-apps-cli
 
-          az staticwebapp build `
-            --source "$(Pipeline.Workspace)\drop\dist" `
-            --name "$(staticWebAppName)" `
-            --api-location "" `
-            --output-location ""
+          echo "Deploying to Static Web App..."
+          swa deploy "$(Pipeline.Workspace)/drop/dist" `
+            --deployment-token "$(deploymentToken)" `
+            --environment production
+
+
+    # - task: PowerShell@2
+    #   displayName: "Deploy to Azure Static Web App (Windows)"
+    #   inputs:
+    #     targetType: inline
+    #     pwsh: false
+    #     script: |
+    #       echo "Logging into Azure..."
+    #       az login --service-principal `
+    #         --username "$(azureServicePrincipalId)" `
+    #         --password "$(azureServicePrincipalKey)" `
+    #         --tenant   "$(azureTenantId)"
+    #       az extension add --name staticwebapp --yes
+
+    #       az staticwebapp build `
+    #         --source "$(Pipeline.Workspace)\drop\dist" `
+    #         --name "$(staticWebAppName)" `
+    #         --api-location "" `
+    #         --output-location ""
 
 
     # - task: AzureWebApp@1
