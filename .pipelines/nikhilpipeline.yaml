@@ -88,24 +88,24 @@ stages:
     - download: current
       artifact: drop
 
-    # - task: AzureStaticWebApp@0
-    #   inputs:
-    #     app_location: "$(Pipeline.Workspace)/drop/dist"
-    #     skip_app_build: true
-    #     azure_static_web_apps_api_token: "$(deploymentToken)"
-    #   displayName: "Deploy to Azure Static Web App"
-
-    - task: PowerShell@2
-      displayName: "Deploy to Azure Static Web App (Windows)"
+    - task: AzureStaticWebApp@0
       inputs:
-        targetType: inline
-        script: |
-          npm install -g @azure/static-web-apps-cli
+        app_location: "$(Pipeline.Workspace)/drop/dist"
+        skip_app_build: true
+        azure_static_web_apps_api_token: "$(deploymentToken)"
+      displayName: "Deploy to Azure Static Web App"
 
-          echo "Deploying to Static Web App..."
-          swa deploy "$(Pipeline.Workspace)/drop/dist" `
-            --deployment-token "$(deploymentToken)" `
-            --environment production
+    # - task: PowerShell@2
+    #   displayName: "Deploy to Azure Static Web App (Windows)"
+    #   inputs:
+    #     targetType: inline
+    #     script: |
+    #       npm install -g @azure/static-web-apps-cli
+
+    #       echo "Deploying to Static Web App..."
+    #       swa deploy "$(Pipeline.Workspace)/drop/dist" `
+    #         --deployment-token "$(deploymentToken)" `
+    #         --environment production
 
 
     # - task: PowerShell@2
