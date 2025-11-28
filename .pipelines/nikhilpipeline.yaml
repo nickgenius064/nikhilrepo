@@ -88,14 +88,33 @@ stages:
     - download: current
       artifact: drop
 
+    - task: PowerShell@2
+      displayName: "Deploy to Azure Static Web App (Windows)"
+      inputs:
+        targetType: inline
+        pwsh: false
+        script: |
+          echo "Logging into Azure..."
+          az login --service-principal `
+            --username "$(azureServicePrincipalId)" `
+            --password "$(azureServicePrincipalKey)" `
+            --tenant   "$(azureTenantId)"
+
+          echo "Uploading content to Static Web App..."
+          az staticwebapp upload `
+            --name "$(staticWebAppName)" `
+            --source "$(Pipeline.Workspace)\drop\dist"
+
+          echo "Deployment completed successfully!"
+
     # - task: AzureWebApp@1
     #   displayName: 'Deploy to $(webAppName)'
     #   inputs:
     #     azureSubscription: '$(azureServiceConnection)'
     #     appName: '$(webAppName)'
     #     package: '$(Pipeline.Workspace)/drop/site.zip'
-    - task: AzureStaticWebApp@0
-      inputs:
-        app_location: "dist"
-        output_location: ""        # since you're generating HTML manually
-        azure_static_web_apps_api_token: "$(deployment_token)"
+    # - task: AzureStaticWebApp@0
+    #   inputs:
+    #     app_location: "dist"
+    #     output_location: ""        # since you're generating HTML manually
+    #     azure_static_web_apps_api_token: "$(deployment_token)"
