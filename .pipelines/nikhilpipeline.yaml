@@ -100,7 +100,7 @@ stages:
             --password "$(azureServicePrincipalKey)" `
             --tenant   "$(azureTenantId)"
           echo "Ensuring Static Web App extension is installed..."
-          az extension add --name azure-staticwebapp --yes
+          az extension add --name "$(staticWebAppName)" --yes
 
           echo "Uploading content to Static Web App..."
           az staticwebapp upload `
