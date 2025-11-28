@@ -88,34 +88,33 @@ stages:
     - download: current
       artifact: drop
 
-    - task: AzureStaticWebApp@0
-      inputs:
-        app_location: "$(Pipeline.Workspace)/drop/dist"
-        skip_app_build: true
-        azure_static_web_apps_api_token: "$(deploymentToken)"
-      displayName: "Deploy to Azure Static Web App"
-
-
-    # - task: PowerShell@2
-    #   displayName: "Deploy to Azure Static Web App (Windows)"
+    # - task: AzureStaticWebApp@0
     #   inputs:
-    #     targetType: inline
-    #     pwsh: false
-    #     script: |
-    #       echo "Logging into Azure..."
-    #       az login --service-principal `
-    #         --username "$(azureServicePrincipalId)" `
-    #         --password "$(azureServicePrincipalKey)" `
-    #         --tenant   "$(azureTenantId)"
-    #       echo "Ensuring Static Web App extension is installed..."
-    #       az extension add --name "$(staticWebAppName)" --yes
+    #     app_location: "$(Pipeline.Workspace)/drop/dist"
+    #     skip_app_build: true
+    #     azure_static_web_apps_api_token: "$(deploymentToken)"
+    #   displayName: "Deploy to Azure Static Web App"
 
-    #       echo "Uploading content to Static Web App..."
-    #       az staticwebapp upload `
-    #         --name "$(staticWebAppName)" `
-    #         --source "$(Pipeline.Workspace)\drop\dist"
 
-    #       echo "Deployment completed successfully!"
+    - task: PowerShell@2
+      displayName: "Deploy to Azure Static Web App (Windows)"
+      inputs:
+        targetType: inline
+        pwsh: false
+        script: |
+          echo "Logging into Azure..."
+          az login --service-principal `
+            --username "$(azureServicePrincipalId)" `
+            --password "$(azureServicePrincipalKey)" `
+            --tenant   "$(azureTenantId)"
+          az extension add --name staticwebapp --yes
+
+          az staticwebapp build `
+            --source "$(Pipeline.Workspace)\drop\dist" `
+            --name "$(staticWebAppName)" `
+            --api-location "" `
+            --output-location ""
+
 
     # - task: AzureWebApp@1
     #   displayName: 'Deploy to $(webAppName)'
