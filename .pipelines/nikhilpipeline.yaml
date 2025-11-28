@@ -95,7 +95,7 @@ stages:
         api_location: ""
         output_location: ""
         skip_app_build: true
-
+        pwsh: true
     # - task: PowerShell@2
     #   displayName: "Deploy to Azure Static Web App (Windows)"
     #   inputs:
