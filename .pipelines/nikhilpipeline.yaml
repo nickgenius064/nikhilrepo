@@ -32,7 +32,7 @@ stages:
          pwsh: false
          script: |
             # destination folder
-            $dist = Join-Path "$(Build.SourcesDirectory)/dist"
+            $dist = "$(Build.SourcesDirectory)/dist"
 
             # ensure folder exists
             New-Item -ItemType Directory -Force -Path $dist | Out-Null
@@ -56,7 +56,7 @@ stages:
             "@
 
             # write file with UTF8 encoding
-            $outPath = Join-Path $dist 'index.html'
+            $outPath = "$dist\index.html"
             $content | Out-File -FilePath $outPath -Encoding UTF8
 
             Write-Host "Created $outPath"
