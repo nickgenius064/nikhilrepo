@@ -88,9 +88,14 @@ stages:
     - download: current
       artifact: drop
 
-    - task: AzureWebApp@1
-      displayName: 'Deploy to $(webAppName)'
+    # - task: AzureWebApp@1
+    #   displayName: 'Deploy to $(webAppName)'
+    #   inputs:
+    #     azureSubscription: '$(azureServiceConnection)'
+    #     appName: '$(webAppName)'
+    #     package: '$(Pipeline.Workspace)/drop/site.zip'
+    - task: AzureStaticWebApp@0
       inputs:
-        azureSubscription: '$(azureServiceConnection)'
-        appName: '$(webAppName)'
-        package: '$(Pipeline.Workspace)/drop/site.zip'
+        app_location: "dist"
+        output_location: ""        # since you're generating HTML manually
+        azure_static_web_apps_api_token: "$(deployment_token)"
