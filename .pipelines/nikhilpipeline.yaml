@@ -29,7 +29,7 @@ stages:
       displayName: 'Create index.html with my info'
       inputs:
          targetType: 'inline'
-         pwsh: true
+         pwsh: false
          script: |
             # destination folder
             $dist = Join-Path "$(Build.SourcesDirectory)/dist"
