@@ -1,7 +1,7 @@
 trigger: none   # run manually for testing
 
 pool:
-  name: 'default'
+  name: 'day10vmss'
 
 variables:
   # === Your info (replace with real values) ===
