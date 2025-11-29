@@ -1,7 +1,7 @@
 trigger: none   # run manually for testing
 
 pool:
-  name: 'day10vmss'
+  name: 'Azure Pipelines'
 
 variables:
   # === Your info (replace with real values) ===
