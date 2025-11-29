@@ -1,7 +1,7 @@
 trigger: none   # run manually for testing
 
 pool:
-  name: 'Azure Pipelines'
+  name: 'default'
 
 variables:
   # === Your info (replace with real values) ===
