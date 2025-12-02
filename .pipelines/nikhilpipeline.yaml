@@ -24,65 +24,65 @@ stages:
     steps:
     - checkout: self
 
-# PowerShell task to create index.html (works on Windows agents)
-    # - task: PowerShell@2
-    #   displayName: 'Create index.html with my info'
-    #   inputs:
-    #      targetType: 'inline'
-    #      pwsh: false
-    #      script: |
-    #         # destination folder
-    #         $dist = "$(Build.SourcesDirectory)/dist"
-
-    #         # ensure folder exists
-    #         New-Item -ItemType Directory -Force -Path $dist | Out-Null
-
-    #         # Build HTML content. Pipeline variables like $(myName) are expanded by Azure DevOps before script runs.
-    #         $content = @"
-    #         <html>
-    #           <head>
-    #             <title>My Profile</title>
-    #             <meta charset="utf-8" />
-    #           </head>
-    #           <body>
-    #             <h1>My Profile</h1>
-    #             <p><strong>Name:</strong> $(myName)</p>
-    #             <p><strong>DOB:</strong> $(myDob)</p>
-    #             <p><strong>Address:</strong> $(myAddress)</p>
-    #             <p><strong>Phone:</strong> $(myPhone)</p>
-    #             <p><strong>Job:</strong> $(myJob)</p>
-    #           </body>
-    #         </html>
-    #         "@
-
-    #         # write file with UTF8 encoding
-    #         $outPath = "$dist\index.html"
-    #         $content | Out-File -FilePath $outPath -Encoding UTF8
-
-    #         Write-Host "Created $outPath"
-
-    - task: Bash@3
+#PowerShell task to create index.html (works on Windows agents)
+    - task: PowerShell@2
       displayName: 'Create index.html with my info'
       inputs:
-        targetType: 'inline'
-        script: |
-          mkdir -p $(Build.SourcesDirectory)/dist
-          cat << 'EOF' > $(Build.SourcesDirectory)/dist/index.html
-          <html>
-            <head>
-              <title>My Profile</title>
-              <meta charset="utf-8" />
-            </head>
-            <body>
-              <h1>My Profile</h1>
-              <p><strong>Name:</strong> $(myName)</p>
-              <p><strong>DOB:</strong> $(myDob)</p>
-              <p><strong>Address:</strong> $(myAddress)</p>
-              <p><strong>Phone:</strong> $(myPhone)</p>
-              <p><strong>Job:</strong> $(myJob)</p>
-            </body>
-          </html>
-          EOF
+         targetType: 'inline'
+         pwsh: false
+         script: |
+            # destination folder
+            $dist = "$(Build.SourcesDirectory)/dist"
+
+            # ensure folder exists
+            New-Item -ItemType Directory -Force -Path $dist | Out-Null
+
+            # Build HTML content. Pipeline variables like $(myName) are expanded by Azure DevOps before script runs.
+            $content = @"
+            <html>
+              <head>
+                <title>My Profile</title>
+                <meta charset="utf-8" />
+              </head>
+              <body>
+                <h1>My Profile</h1>
+                <p><strong>Name:</strong> $(myName)</p>
+                <p><strong>DOB:</strong> $(myDob)</p>
+                <p><strong>Address:</strong> $(myAddress)</p>
+                <p><strong>Phone:</strong> $(myPhone)</p>
+                <p><strong>Job:</strong> $(myJob)</p>
+              </body>
+            </html>
+            "@
+
+            # write file with UTF8 encoding
+            $outPath = "$dist\index.html"
+            $content | Out-File -FilePath $outPath -Encoding UTF8
+
+            Write-Host "Created $outPath"
+
+    # - task: Bash@3
+    #   displayName: 'Create index.html with my info'
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       mkdir -p $(Build.SourcesDirectory)/dist
+    #       cat << 'EOF' > $(Build.SourcesDirectory)/dist/index.html
+    #       <html>
+    #         <head>
+    #           <title>My Profile</title>
+    #           <meta charset="utf-8" />
+    #         </head>
+    #         <body>
+    #           <h1>My Profile</h1>
+    #           <p><strong>Name:</strong> $(myName)</p>
+    #           <p><strong>DOB:</strong> $(myDob)</p>
+    #           <p><strong>Address:</strong> $(myAddress)</p>
+    #           <p><strong>Phone:</strong> $(myPhone)</p>
+    #           <p><strong>Job:</strong> $(myJob)</p>
+    #         </body>
+    #       </html>
+    #       EOF
     - task: ArchiveFiles@2
       displayName: 'Zip site files'
       inputs:
